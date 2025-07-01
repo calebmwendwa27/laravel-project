@@ -1,7 +1,7 @@
 @extends('layouts.app', ['hide_navigation' => true])
 
 @section('content')
-<div class="bg-white min-h-screen">
+<div class="bg-white  bg-cover bg-center min-h-screen " style="background-image: url('/images/hospital1.jpg')">
    
     <div class="bg-blue-600 shadow-md px-5 py-4">
         
@@ -41,8 +41,8 @@
 
   
 
-  
-    <div class="container mx-auto px-4 py-6 from-blue-100 to-white">
+
+    <div class="container mx-auto px-4 py-6 from-blue-100 to-white ">
         {{-- Search Results --}}
         @if(isset($hospital_list) && count($hospital_list))
             <h3 class="text-xl font-semibold mb-4 text-gray-700">
@@ -62,19 +62,75 @@
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Agent</th>
                         </tr>
                     </thead>
-                    <tbody class="divide-y divide-gray-200">
-                        @foreach($hospital_list as $hospital)
-                        <tr class="hover:bg-gray-50 transition">
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ $hospital->reg_number }}</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $hospital->facility_name }}</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $hospital->county }}</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $hospital->facility_type }}</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $hospital->level }}</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $hospital->facility_agent }}</td>
-                        </tr>
-                        @endforeach
-                    </tbody>
+                   <tbody class="divide-y divide-gray-200">
+    @foreach($hospital_list as $hospital)
+        <tr class="hover:bg-gray-50 transition" onclick="window.location.href='{{ route('hospitalRedirect', $hospital->id) }}'">
+            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ $hospital->reg_number }}</td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $hospital->facility_name }}</td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $hospital->county }}</td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $hospital->facility_type }}</td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $hospital->level }}</td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $hospital->facility_agent }}</td>
+        </tr>
+    @endforeach
+</tbody>
+
                 </table>
+            {{-- pagination of the returned results --}}
+@if ($hospital_list->lastPage() > 1)
+    <div class="flex justify-center mt-6">
+        <nav class="inline-flex items-center border border-gray-300 rounded-md px-4 py-2">
+            {{-- Previous Button --}}
+            @if ($hospital_list->onFirstPage())
+                <span class="text-gray-400 mr-2">← Previous</span>
+            @else
+                <a href="{{ $hospital_list->appends(request()->query())->previousPageUrl() }}"
+                   class="text-white hover:underline mr-2">← Previous</a>
+            @endif
+
+            {{-- Page Numbers --}}
+            @php
+                $start = max(1, $hospital_list->currentPage() - 2);
+                $end = min($hospital_list->lastPage(), $hospital_list->currentPage() + 2);
+            @endphp
+
+            @if ($start > 1)
+                <a href="{{ $hospital_list->url(1) }}"
+                   class="mx-1 text-sm text-gray-700 hover:text-blue-600 {{ $hospital_list->currentPage() == 1 ? 'font-bold underline text-blue-600' : '' }}">
+                   1
+                </a>
+                <span class="mx-1 text-gray-500">...</span>
+            @endif
+
+            @for ($i = $start; $i <= $end; $i++)
+                <a href="{{ $hospital_list->appends(request()->query())->url($i) }}"
+                   class="mx-1 text-sm px-2 py-1 border-b-2 {{ $hospital_list->currentPage() == $i ? 'border-blue-500 text-blue-600 font-bold' : 'border-transparent text-gray-700 hover:border-gray-400' }}">
+                    {{ $i }}
+                </a>
+            @endfor
+
+            @if ($end < $hospital_list->lastPage())
+                <span class="mx-1 text-gray-500">...</span>
+                <a href="{{ $hospital_list->url($hospital_list->lastPage()) }}"
+                   class="mx-1 text-sm text-gray-700 hover:text-blue-600">
+                   {{ $hospital_list->lastPage() }}
+                </a>
+            @endif
+
+            {{-- Next Button --}}
+            @if ($hospital_list->hasMorePages())
+                <a href="{{ $hospital_list->appends(request()->query())->nextPageUrl() }}"
+                   class="text-white hover:underline ml-2">Next →</a>
+            @else
+                <span class="text-gray-400 ml-2">Next →</span>
+            @endif
+        </nav>
+    </div>
+@endif
+
+ 
+
+
             </div>
         @elseif(isset($query))
             <p class="mt-6 text-red-600">No hospitals found matching <strong>"{{ $query }}"</strong>.</p>

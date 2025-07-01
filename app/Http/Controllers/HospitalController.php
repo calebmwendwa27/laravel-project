@@ -16,7 +16,8 @@ class HospitalController extends Controller
        ->orWhere('facility_type','LIKE', "%$query%")
        ->orWhere('reg_number','LIKE', "%$query%")
        ->orWhere('facility_agent','LIKE', "%$query%")
-        ->get();}
+       
+        ->paginate(10);}
      
 
    return view ('hospital', compact('hospital_list','query'));

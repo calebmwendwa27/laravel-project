@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <meta name="csrf-token" content="{{ csrf_token() }}">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
     
     <title>@yield("title") | Global Disease Search</title>
     
@@ -18,6 +21,7 @@
 <footer></footer>
 
 <style>
+
 body {
     margin: 0;
     font-family: Arial, sans-serif;
@@ -33,7 +37,7 @@ body {
 }
 
 .mainboard h1 {
-    font-size: 36px;
+    font-size: 40px;
     margin-bottom: 10px;
 }
 
@@ -45,44 +49,59 @@ body {
 .search-box {
     display: flex;
     justify-content: center;
-    margin-bottom: 40px;
-    position: relative;
+    margin-bottom: 16px;
     flex-wrap: wrap;
     gap: 10px;
+    position: relative;
+    align-items: center;
 }
 
 .search-box input {
     width: 50%;
     padding: 12px 20px;
     border-radius: 8px;
-    border: none;
+    border: 1px solid;
     font-size: 16px;
     outline: none;
     max-width: 500px;
 }
 
-.filter-dropdown {
+.search-btn-icon {
+    background: #fff;
+    border: 2px solid #2563eb;
+    color: #2563eb;
+    border-radius: 8px;
+    padding: 10px 16px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background 0.3s, color 0.3s;
+}
+
+.search-btn-icon:hover {
+    background: #2563eb;
+    color: #fff;
+}
+
+.search-btn-icon i {
+    font-size: 16px;
+}
+
+.filter-btn {
     padding: 12px 20px;
     border-radius: 8px;
-    border: none;
+    background: #fff;
+    color: #2563eb;
+    border: 2px solid #2563eb;
     font-size: 16px;
-    min-width: 150px;
-    max-width: 100%;
-}
-
-.search-box button {
-    position: absolute;
-    right: 26%;
-    top: 50%;
-    transform: translateY(-50%);
-    background: none;
-    border: none;
     cursor: pointer;
+    transition: background 0.3s, color 0.3s;
+    text-decoration: none;
+    display: inline-block;
 }
 
-.search-box button img {
-    width: 20px;
-    height: 20px;
+.filter-btn:hover.active{
+    background: #2563eb;
+    color: #fff;
 }
 
 .stats {
@@ -90,6 +109,7 @@ body {
     justify-content: center;
     gap: 20px;
     flex-wrap: wrap;
+    margin-top: 20px;
 }
 
 .stat-card {
@@ -98,17 +118,36 @@ body {
     border-radius: 12px;
     min-width: 150px;
     backdrop-filter: blur(4px);
+    color: #fff;
+    text-align: center;
 }
 
 .stat-card h2 {
     margin: 0;
     font-size: 24px;
-    color: #fff;
 }
 
 .stat-card p {
     margin: 5px 0 0;
     color: #dbeafe;
+}
+
+.filter-bar {
+    background: #fff;
+    padding: 20px;
+    margin: 30px auto;
+    max-width: 800px;
+    text-align: center;
+    border-radius: 12px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.category-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 15px;
 }
 
 .details {
@@ -119,6 +158,7 @@ body {
     flex-wrap: wrap;
     background: #fff;
     box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+    margin-top: 20px;
 }
 
 .carddetails {
@@ -149,6 +189,7 @@ body {
 .section h2 {
     font-size: 24px;
     margin-bottom: 20px;
+    text-align: center;
 }
 
 .disease-cards {
@@ -169,7 +210,6 @@ body {
     position: relative;
     overflow: hidden;
 }
-
 .disease-card .badge {
     position: absolute;
     top: 15px;
@@ -178,7 +218,6 @@ body {
     border-radius: 6px;
     font-size: 11px;
     color: #fff;
-    background: #fbbf24;
     max-width: 90%;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -195,26 +234,14 @@ body {
 }
 
 .disease-card h3 {
-    margin: 0;
+    margin: 10px 0;
     font-size: 20px;
 }
 
 .disease-card p {
     font-size: 14px;
-    margin: 10px 0;
-}
-
-.tags {
-    display: flex;
-    gap: 6px;
-    flex-wrap: wrap;
-}
-
-.tag {
-    background: #e0e7ff;
-    padding: 4px 8px;
-    border-radius: 6px;
-    font-size: 12px;
+    margin: 8px 0;
+    color: #555;
 }
 
 .details-btn {
@@ -222,34 +249,16 @@ body {
     margin-top: 15px;
     text-align: center;
     padding: 8px 0;
-    border: 1px solid #cbd5e1;
+    border: 1px solid #2563eb;
     border-radius: 6px;
-    background: #f8fafc;
-    cursor: pointer;
+    background: #2563eb;
+    color: #fff;
     text-decoration: none;
-    color: #333;
+    transition: background 0.3s;
 }
 
-.browse-category {
-    display: flex;
-    justify-content: center;
-    gap: 40px;
-    flex-wrap: wrap;
-    background: #fff;
-    padding: 20px;
-    margin-top: 30px;
-    border-radius: 12px;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-}
-
-.category-item {
-    text-align: center;
-    color: #333;
-}
-
-.category-item img {
-    width: 30px;
-    margin-bottom: 8px;
+.details-btn:hover {
+    background: #1e40af;
 }
 
 @media (max-width: 768px) {
@@ -262,17 +271,177 @@ body {
         width: 80%;
     }
 
-    .filter-dropdown {
+    .filter-btn {
         width: 80%;
-        margin: 10px 0 0;
     }
 
-    .search-box button {
-        right: 11%;
+    .stats, .details {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .disease-card {
+        width: 90%;
     }
 }
+
+.category-scroll {
+    overflow-x: auto;
+    padding: 10px 0;
+    margin: 0 auto;
+    max-width: 800px;
+}
+
+.category-buttons-scroll {
+    display: flex;
+    gap: 10px;
+    min-width: max-content;
+}
+
+.category-scroll::-webkit-scrollbar {
+    height: 6px;
+}
+
+.category-scroll::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 3px;
+}
+
+.category-scroll::-webkit-scrollbar-track {
+    background: #f1f5f9;
+}
+
+.pagination-links {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.pagination-links .pagination {
+    display: inline-flex;
+    gap: 6px;
+}
+
+.pagination-links .pagination a,
+.pagination-links .pagination span {
+    padding: 6px 12px;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    background: #fff;
+    color: #333;
+    text-decoration: none;
+}
+
+.pagination-links .pagination .active {
+    background: #2563eb;
+    color: #fff;
+    font-weight: bold;
+}
+
+.filter-dropdown {
+    width: 100%;
+    max-width: auto;
+    margin: 15px auto 0;
+    text-align: center;
+}
+
+#dropdown-content {
+    background-color: #fff;
+    max-height: 270px;
+    overflow-y: auto;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    padding: 15px;
+    margin-top: 15px;
+    display: none;
+}
+
+.category-buttons-scroll {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: center;
+}
+
+#dropdown-content::-webkit-scrollbar {
+    width: 6px;
+}
+
+#dropdown-content::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 3px;
+}
+
+#dropdown-content::-webkit-scrollbar-track {
+    background: #f1f5f9;
+}
+.suggestions-list {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    max-height: 200px;
+    overflow-y: auto;
+    background: #fff;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    z-index: 10;
+    list-style: none;
+    padding: 0;
+    margin: 5px 0 0;
+}
+
+.suggestions-list li {
+    padding: 10px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.suggestions-list li:hover {
+    background: #f1f5f9;
+}
+
+.modal {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.6);
+}
+
+.modal.hidden {
+    display: none;
+}
+
+.modal-content {
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 12px;
+    max-width: 500px;
+    width: 90%;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+    position: relative;
+}
+
+.close-btn {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    font-size: 28px;
+    font-weight: bold;
+    color: #333;
+    cursor: pointer;
+}
+
+
 </style>
- 
 
 <script>
 function showSuggestions(keyword) {
@@ -316,7 +485,46 @@ function toggleDescription(container) {
     const isClamped = desc.classList.contains('line-clamp-4');
     button.textContent = isClamped ? 'Show more' : 'Show less';
 }
+
+function filterCategory(category) {
+    const url = new URL(window.location.href);
+    url.searchParams.set('filter', category);
+    window.location.href = url.toString();
+}
+
+function toggleDropdown() {
+    const dropdown = document.getElementById('dropdown-content');
+    dropdown.style.display = (dropdown.style.display === 'block') ? 'none' : 'block';
+}
+
+// Optional: Close dropdown if clicking outside
+document.addEventListener('click', function(event) {
+    const dropdown = document.getElementById('dropdown-content');
+    const button = document.querySelector('.filter-dropdown button');
+
+    if (!dropdown.contains(event.target) && !button.contains(event.target)) {
+        dropdown.style.display = 'none';
+    }
+});
+
+// ---------------- MODAL LOGIC ----------------
+
+function showDetails(title, group, desc, code, vcode, category) {
+    document.getElementById('modalTitle').innerText = title;
+    document.getElementById('modalGroup').innerText = group;
+    document.getElementById('modalDesc').innerText = desc;
+    document.getElementById('modalCode').innerText = code;
+    document.getElementById('modalVCode').innerText = vcode;
+    document.getElementById('modalCategory').innerText = category;
+    
+    document.getElementById('detailsModal').classList.remove('hidden');
+}
+
+function closeModal() {
+    document.getElementById('detailsModal').classList.add('hidden');
+}
 </script>
+
 
 </body>
 </html>

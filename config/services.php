@@ -35,4 +35,12 @@ return [
         ],
     ],
 
+    'icd' => [
+    'api_url' => env('WHO_ICD_API_URL'),
+    'token_url' => env('WHO_ICD_TOKEN_URL'),
+    'client_id' => env('WHO_ICD_CLIENT_ID'),
+    'client_secret' => env('WHO_ICD_CLIENT_SECRET'),
+    ],
+
+
 ];

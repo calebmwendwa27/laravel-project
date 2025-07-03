@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Dashboard')
+@section('title', 'Disease Search Dashboard')
 
 @section('content')
 
@@ -16,18 +16,8 @@
             id="searchInput" 
             value="{{ $query ?? '' }}"
         >
-
-        <select name="filter" class="filter-dropdown">
-            <option value="">All Categories</option>
-            @foreach($categories as $category)
-                <option value="{{ $category }}" {{ ($filter ?? '') == $category ? 'selected' : '' }}>
-                    {{ $category }}
-                </option>
-            @endforeach
-        </select>
-
-        <button type="submit">
-            <img src="https://cdn-icons-png.flaticon.com/512/622/622669.png" alt="Search">
+        <button type="submit" class="search-btn-icon">
+           <i class="fas fa-search"></i>
         </button>
     </form>
 
@@ -47,35 +37,47 @@
     </div>
 </section>
 
-<section class="details">
-    <div class="carddetails">
-        <h3>85,430</h3>
-        <p>Total Records<br><small>+12% this month</small></p>
+<div class="filter-bar">
+    <h4>Search by disease Category</h4>
+    
+    <div class="filter-dropdown">
+        <button class="filter-btn" type="button" onclick="toggleDropdown()">Select Category</button>
+        
+        <div id="dropdown-content" class="dropdown-content hidden">
+            <div class="category-buttons-scroll">
+                <button class="filter-btn {{ ($filter ?? '') == '' ? 'active' : '' }}" onclick="filterCategory('')">All</button>
+                @foreach($categories as $category)
+                    <button 
+                        class="filter-btn {{ ($filter ?? '') == $category ? 'active' : '' }}" 
+                        onclick="filterCategory('{{ $category }}')" 
+                        data-fulltext="{{ $category }}">
+                        {{ $category }}
+                    </button>
+                @endforeach
+            </div>
+        </div>
     </div>
-    <div class="carddetails">
-        <h3>98.7%</h3>
-        <p>Search Accuracy<br><small>Improved matching</small></p>
-    </div>
-    <div class="carddetails">
-        <h3>2 hours ago</h3>
-        <p>Last Updated<br><small>Real-time sync</small></p>
-    </div>
-    <div class="carddetails">
-        <h3>1,200+</h3>
-        <p>Verified Sources<br><small>Medical professionals</small></p>
-    </div>
-</section>
+</div>
 
 <section class="section">
-
-    @if(isset($diseases) && count($diseases))
-        <h2>Search Results ({{ count($diseases) }})</h2>
+    @if(isset($diseases) && $diseases->count())
+        <h2>Search Results ({{ $diseases->total() }})</h2>
 
         <div class="disease-cards">
             @foreach($diseases as $disease)
-                <div class="disease-card">
-                    <span class="badge 
-                        {{ strtolower($disease->category_desc) === 'cardiovascular' ? 'high' : 'moderate' }}">
+                <div 
+                    class="disease-card" 
+                    onclick="showDetails(
+                        '{{ addslashes($disease->variant_name ?? 'Unnamed Variant') }}',
+                        '{{ addslashes($disease->group_desc) }}',
+                        '{{ addslashes($disease->variant_desc) }}',
+                        '{{ $disease->code }}',
+                        '{{ $disease->variant_code }}',
+                        '{{ addslashes($disease->category_desc) }}'
+                    )"
+                    style="cursor: pointer;"
+                >
+                    <span class="badge {{ strtolower($disease->category_desc) === 'cardiovascular' ? 'high' : 'moderate' }}">
                         {{ $disease->category_desc }}
                     </span>
                     <h3>{{ $disease->variant_name ?? 'Unnamed Variant' }}</h3>
@@ -87,6 +89,36 @@
             @endforeach
         </div>
 
+        <div class="pagination-links">
+            <p>Showing page {{ $diseases->currentPage() }} of {{ $diseases->lastPage() }} | Total Results: {{ $diseases->total() }}</p>
+            <div class="pagination">
+                @if ($diseases->onFirstPage())
+                    <span>&laquo; Previous</span>
+                @else
+                    <a href="{{ $diseases->previousPageUrl() }}">&laquo; Previous</a>
+                @endif
+
+                @php
+                    $start = max(1, $diseases->currentPage() - 2);
+                    $end = min($diseases->lastPage(), $diseases->currentPage() + 2);
+                @endphp
+
+                @for ($i = $start; $i <= $end; $i++)
+                    @if ($i == $diseases->currentPage())
+                        <span class="active">{{ $i }}</span>
+                    @else
+                        <a href="{{ $diseases->url($i) }}">{{ $i }}</a>
+                    @endif
+                @endfor
+
+                @if ($diseases->hasMorePages())
+                    <a href="{{ $diseases->nextPageUrl() }}">Next &raquo;</a>
+                @else
+                    <span>Next &raquo;</span>
+                @endif
+            </div>
+        </div>
+
     @elseif(empty($query) && empty($filter))
         <h2>Featured Diseases</h2>
         <div class="disease-cards">
@@ -94,33 +126,48 @@
                 <span class="badge high">Cardiovascular</span>
                 <h3>Hypertension</h3>
                 <p>Cardiovascular disease causing high blood pressure.</p>
-                <p> Affects 45% of adults globally</p>
+                <p>Affects 45% of adults globally</p>
             </div>
             <div class="disease-card">
                 <span class="badge moderate">Respiratory</span>
                 <h3>Asthma</h3>
                 <p>Respiratory condition with airway inflammation.</p>
-                <p> Common in children and adults</p>
+                <p>Common in children and adults</p>
             </div>
             <div class="disease-card">
                 <span class="badge moderate">Endocrine</span>
                 <h3>Type 2 Diabetes</h3>
                 <p>Metabolic disorder affecting blood sugar regulation.</p>
-                <p> Affects millions worldwide</p>
+                <p>Affects millions worldwide</p>
             </div>
         </div>
 
-        <div class="browse-category">
-            <div class="category-item"><br>Cardiovascular</div>
-            <div class="category-item"><br>Respiratory</div>
-            <div class="category-item"><br>Neurological</div>
-            <div class="category-item"><br>Endocrine</div>
+    @elseif(isset($apiData) && $apiData)
+        <h2>Results from the ICD 11 and 10 API</h2>
+        <div class="disease-cards">
+            <div class="disease-card">
+                <span class="badge moderate">Site results</span>
+                <h3>{{ $apiData['title']['@value'] ?? 'No Title' }}</h3>
+                <p>{{ $apiData['definition']['@value'] ?? 'No Description Available' }}</p>
+                <p><strong>Code:</strong> {{ $apiData['theCode']['code'] ?? 'N/A' }}</p>
+            </div>
         </div>
-
     @else
         <p>No diseases found matching your search.</p>
     @endif
-
 </section>
+
+{{-- MODAL FOR DISEASE DETAILS --}}
+<div id="detailsModal" class="modal hidden">
+    <div class="modal-content">
+        <span class="close-btn" onclick="closeModal()">&times;</span>
+        <h2 id="modalTitle"></h2>
+        <p><strong>Category:</strong> <span id="modalCategory"></span></p>
+        <p><strong>Group:</strong> <span id="modalGroup"></span></p>
+        <p><strong>Description:</strong> <span id="modalDesc"></span></p>
+        <p><strong>Code:</strong> <span id="modalCode"></span></p>
+        <p><strong>Variant Code:</strong> <span id="modalVCode"></span></p>
+    </div>
+</div>
 
 @endsection

@@ -26,7 +26,11 @@ class HospitalController extends Controller
 
 }
 
-
+public function show($id)
+{
+    $hospital = HospitalList::findOrFail($id);
+    return view('HospitalDetails', compact('hospital'));
+}
 
 
 }

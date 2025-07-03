@@ -63,16 +63,18 @@
                         </tr>
                     </thead>
                    <tbody class="divide-y divide-gray-200">
-    @foreach($hospital_list as $hospital)
-        <tr class="hover:bg-gray-50 transition" onclick="window.location.href='{{ route('hospitalRedirect', $hospital->id) }}'">
-            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ $hospital->reg_number }}</td>
-            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $hospital->facility_name }}</td>
-            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $hospital->county }}</td>
-            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $hospital->facility_type }}</td>
-            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $hospital->level }}</td>
-            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $hospital->facility_agent }}</td>
-        </tr>
-    @endforeach
+  @foreach($hospital_list as $hospital)
+    <tr onclick="window.location='{{ route('details', $hospital->id) }}'" 
+        class="hover:bg-gray-50 cursor-pointer transition">
+        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ $hospital->reg_number }}</td>
+        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $hospital->facility_name }}</td>
+        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $hospital->county }}</td>
+        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $hospital->facility_type }}</td>
+        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $hospital->level }}</td>
+        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $hospital->facility_agent }}</td>
+    </tr>
+@endforeach
+
 </tbody>
 
                 </table>

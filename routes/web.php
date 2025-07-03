@@ -9,9 +9,10 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-ROute::get('/hospital', [HospitalController::class, 'search'])->name('hospital');
+ROute::get('/hospitals', [HospitalController::class, 'search'])->name('hospital');
 
-Route::get('hospital/redirect/{id}', [HospitalRedirectController::class, 'redirect'])->name('hospitalRedirect');
+
+Route::get('/hospital/{id}', [HospitalController::class, 'show'])->name('details');
 
 
 Route::get('/dashboard', function () {

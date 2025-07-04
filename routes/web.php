@@ -1,8 +1,10 @@
 <?php
 
+use App\Http\Controllers\FacilityInformationController;
 use App\Http\Controllers\HospitalController;
 use App\Http\Controllers\HospitalRedirectController;
 use App\Http\Controllers\ProfileController;
+use App\Models\FacilityInformation;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -10,6 +12,8 @@ Route::get('/', function () {
 });
 
 ROute::get('/hospitals', [HospitalController::class, 'search'])->name('hospital');
+
+Route::post('/facility-information', [FacilityInformationController::class, 'store'])->name('facility.store');
 
 
 Route::get('/hospital/{id}', [HospitalController::class, 'show'])->name('details');

@@ -2,22 +2,104 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 
 class ServicesOffered extends Model
 {
     use HasFactory;
+    protected $table = 'services_offered';
 
     protected $fillable = [
-        'facility_id',
-        // Mass assign all 84 service and remark fields
-        ...collect(range(1, 84))->flatMap(function ($i) {
-            return ["service{$i}", "remark{$i}"];
-        })->toArray()
+        'facility_information_id',
+    'service1', 'remark1',
+    'service2', 'remark2',
+    'service3', 'remark3',
+    'service4', 'remark4',
+    'service5', 'remark5',
+    'service6', 'remark6',
+    'service7', 'remark7',
+    'service8', 'remark8',
+    'service9', 'remark9',
+    'service10', 'remark10',
+    'service11', 'remark11',
+    'service12', 'remark12',
+    'service13', 'remark13',
+    'service14', 'remark14',
+    'service15', 'remark15',
+    'service16', 'remark16',
+    'service17', 'remark17',
+    'service18', 'remark18',
+    'service19', 'remark19',
+    'service20', 'remark20',
+    'service21', 'remark21',
+    'service22', 'remark22',
+    'service23', 'remark23',
+    'service24', 'remark24',
+    'service25', 'remark25',
+    'service26', 'remark26',
+    'service27', 'remark27',
+    'service28', 'remark28',
+    'service29', 'remark29',
+    'service30', 'remark30',
+    'service31', 'remark31',
+    'service32', 'remark32',
+    'service33', 'remark33',
+    'service34', 'remark34',
+    'service35', 'remark35',
+    'service36', 'remark36',
+    'service37', 'remark37',
+    'service38', 'remark38',
+    'service39', 'remark39',
+    'service40', 'remark40',
+    'service41', 'remark41',
+    'service42', 'remark42',
+    'service43', 'remark43',
+    'service44', 'remark44',
+    'service45', 'remark45',
+    'service46', 'remark46',
+    'service47', 'remark47',
+    'service48', 'remark48',
+    'service49', 'remark49',
+    'service50', 'remark50',
+    'service51', 'remark51',
+    'service52', 'remark52',
+    'service53', 'remark53',
+    'service54', 'remark54',
+    'service55', 'remark55',
+    'service56', 'remark56',
+    'service57', 'remark57',
+    'service58', 'remark58',
+    'service59', 'remark59',
+    'service60', 'remark60',
+    'service61', 'remark61',
+    'service62', 'remark62',
+    'service63', 'remark63',
+    'service64', 'remark64',
+    'service65', 'remark65',
+    'service66', 'remark66',
+    'service67', 'remark67',
+    'service68', 'remark68',
+    'service69', 'remark69',
+    'service70', 'remark70',
+    'service71', 'remark71',
+    'service72', 'remark72',
+    'service73', 'remark73',
+    'service74', 'remark74',
+    'service75', 'remark75',
+    'service76', 'remark76',
+    'service77', 'remark77',
+    'service78', 'remark78',
+    'service79', 'remark79',
+    'service80', 'remark80',
+    'service81', 'remark81',
+    'service82', 'remark82',
+    'service83', 'remark83',
+    'service84', 'remark84',
     ];
-     public function facility()
+
+    public function facility()
     {
-        return $this->belongsTo(FacilityInformation::class);
+        return $this->belongsTo(FacilityInformation::class, 'facility_information_id');
     }
 }

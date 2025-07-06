@@ -137,6 +137,9 @@
                 </div>
 
                 <!-- Step 5 -->
+                
+                
+                
                 <div x-show="step === 5" class="bg-white p-6 rounded shadow">
                     <h2 class="text-xl font-bold mb-4">Personnel</h2>
                     <div class="space-y-4">

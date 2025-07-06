@@ -36,5 +36,18 @@ class FacilityInformation extends Model
 {
     return $this->hasOne(MandatoryRequirement::class);
 }
+public function services()
+{
+    return $this->hasOne(ServicesOffered::class);
+}
+public function facilityInfrastructure()
+{
+    return $this->hasOne(FacilityInfrastructure::class);
+}
+public function personnelAvailability()
+{
+    return $this->hasOne(PersonnelAvailability::class);
+}
+
 
 }

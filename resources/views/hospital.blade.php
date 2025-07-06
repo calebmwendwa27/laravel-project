@@ -71,7 +71,7 @@
         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $hospital->county }}</td>
         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $hospital->facility_type }}</td>
         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $hospital->level }}</td>
-        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $hospital->facility_agent }}</td>
+        <td class="px-6 py-4 whitespace-nowrap tedxt-sm text-gray-500">{{ $hospital->facility_agent }}</td>
     </tr>
 @endforeach
 

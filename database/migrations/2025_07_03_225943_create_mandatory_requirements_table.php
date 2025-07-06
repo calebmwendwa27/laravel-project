@@ -8,14 +8,27 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('services_offered', function (Blueprint $table) {
+        Schema::create('mandatory_requirements', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('facility_information_id')->constrained()->onDelete('cascade');
 
-            for ($i = 1; $i <= 84; $i++) {
-                $table->tinyInteger("service{$i}")->nullable();
-                $table->string("remark{$i}")->nullable();
-            }
+            // Foreign key to facility_information
+            $table->foreignId('facility_information_id')
+                ->constrained()
+                ->onDelete('cascade');
+
+            // Section B fields
+            $table->tinyInteger('opd_ae')->nullable();
+            $table->tinyInteger('functional_departments')->nullable();
+            $table->tinyInteger('inpatient_beds')->nullable();
+            $table->tinyInteger('icu_beds')->nullable();
+            $table->tinyInteger('hdu_beds')->nullable();
+            $table->tinyInteger('theatres')->nullable();
+            $table->tinyInteger('radiology')->nullable();
+            $table->tinyInteger('specialist_services')->nullable();
+            $table->tinyInteger('pharmacy_services')->nullable();
+            $table->tinyInteger('cssd')->nullable();
+            $table->tinyInteger('burns_unit')->nullable();
+            $table->tinyInteger('new_born_unit')->nullable();
 
             $table->timestamps();
         });
@@ -23,6 +36,6 @@ return new class extends Migration
 
     public function down(): void
     {
-        Schema::dropIfExists('services_offered');
+        Schema::dropIfExists('mandatory_requirements');
     }
 };

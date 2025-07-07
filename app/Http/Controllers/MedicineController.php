@@ -54,24 +54,27 @@ class MedicineController extends Controller
 
         $results = Medicine::query()
             ->when($query, function ($q) use ($query) {
-                $q->where('name_of_medicine', 'like', "%{$query}%")
-                  ->orWhere('generic_name', 'like', "%{$query}%")
-                  ->orWhere('diseases', 'like', "%{$query}%");
+                $q->where(function ($sub) use ($query) {
+                    $sub->where('name_of_medicine', 'like', "%{$query}%")
+                        ->orWhere('generic_name', 'like', "%{$query}%")
+                        ->orWhere('diseases', 'like', "%{$query}%");
+                });
             })
             ->when($symptom, function ($q) use ($symptom) {
                 $q->orWhere('symptoms', 'like', "%{$symptom}%");
             })
-            ->when($category, function ($q) use ($category) {
-                $q->where('category', $category);
-            })
             ->when($condition, function ($q) use ($condition) {
                 $q->orWhere('diseases', 'like', "%{$condition}%");
+            })
+            ->when($category, function ($q) use ($category) {
+                $q->where('category', $category);
             })
             ->get();
 
         return view('searchbar', [
             'results' => $results,
             'categories' => $this->defaultCategories,
+            'selectedCategory' => $category,
             'conditions' => [],
             'symptoms' => [],
         ]);
